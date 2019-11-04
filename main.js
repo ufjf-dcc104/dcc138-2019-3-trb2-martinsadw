@@ -10,34 +10,32 @@ function Game() {
     this.gameState.canvas = document.getElementById('canvas');
     this.gameState.ctx = canvas.getContext('2d');
 
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.mouseDown = false;
+    // Input ///////////////////////////////////////////////////////////////////
+    addInputListener(this.gameState.canvas);
+    this.gameState.input = {
+        lastClickCounter: 0,
+    };
+    ////////////////////////////////////////////////////////////////////////////
 
-    // https://stackoverflow.com/a/17130415
-    this.gameState.canvas.addEventListener('mousemove', (event) => {
-        let canvasRect = canvas.getBoundingClientRect();
-        this.mouseX = event.clientX - canvasRect.left;
-        this.mouseY = event.clientY - canvasRect.top;
-    })
-
-    this.gameState.canvas.addEventListener('mousedown', (event) => {
-        this.mouseDown = true;
-    })
-    this.gameState.canvas.addEventListener('mouseup', (event) => {
-        this.mouseDown = false;
-    })
-
+    // Time ////////////////////////////////////////////////////////////////////
     this.gameState.time = 0;
     this.gameState.lastTime = 0;
     this.gameState.framerate = 60;
+    ////////////////////////////////////////////////////////////////////////////
 
+    // Camera //////////////////////////////////////////////////////////////////
     this.gameState.tileSize = 48;
+    ////////////////////////////////////////////////////////////////////////////
 
-    this.map = new Map(map01);
+    // Turn ////////////////////////////////////////////////////////////////////
+    this.gameState.currentTurn = 1;
+    this.gameState.currentStep = 1;
+    ////////////////////////////////////////////////////////////////////////////
+
+    this.gameState.map = new Map(map01);
 
     this.step = (windowTime) => {
-        let {canvas, ctx, lastTime, tileSize} = this.gameState;
+        let {canvas, ctx, lastTime, tileSize, input} = this.gameState;
 
         this.gameState.time = windowTime / 1000;
         let dT = this.gameState.time - this.gameState.lastTime;
@@ -47,33 +45,46 @@ function Game() {
         ctx.fillStyle = "#25a";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        let unitList = [
-            {x: 5, y: 12, type: 'char'},
-            {x: 6, y: 11, type: 'char'},
-            {x: 7, y: 11, type: 'char'},
-            {x: 8, y: 12, type: 'char'},
-            {x: 4, y: 8, type: 'char'},
-        ]
+        let unitList1 = [
+            {x: 5, y: 12, type: 'char_red'},
+            {x: 6, y: 11, type: 'char_red'},
+            {x: 7, y: 11, type: 'char_red'},
+            {x: 8, y: 12, type: 'char_red'},
+            {x: 4, y: 8, type: 'char_red'},
+            {x: 9, y: 8, type: 'char_red'},
+        ];
 
-        let mapOffsetX = centerCanvasX - this.map.ids[0].length * 0.5 * tileSize;
-        let mapOffsetY = centerCanvasY - this.map.ids.length * 0.5 * tileSize;
-        let mouseTileX = Math.floor((this.mouseX - mapOffsetX) / tileSize);
-        let mouseTileY = Math.floor((this.mouseY - mapOffsetY) / tileSize);
+        let unitList2 = [
+            {x: 1, y: 0, type: 'char_blue'},
+            {x: 3, y: 0, type: 'char_blue'},
+            {x: 3, y: 1, type: 'char_blue'},
+            {x: 5, y: 2, type: 'char_blue'},
+            {x: 6, y: 2, type: 'char_blue'},
+            {x: 9, y: 5, type: 'char_blue'},
+        ];
 
-        this.map.draw(this.gameState, mapOffsetX, mapOffsetY);
+        updateGameStateInput(this.gameState);
 
-        for (let i = 0; i < unitList.length; ++i) {
-            let unit = unitList[i];
+        let mapOffsetX = centerCanvasX - this.gameState.map.ids[0].length * 0.5 * tileSize;
+        let mapOffsetY = centerCanvasY - this.gameState.map.ids.length * 0.5 * tileSize;
+
+        this.gameState.map.draw(this.gameState, mapOffsetX, mapOffsetY);
+
+        for (let i = 0; i < unitList1.length; ++i) {
+            let unit = unitList1[i];
+            drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
+        }
+        for (let i = 0; i < unitList2.length; ++i) {
+            let unit = unitList2[i];
             drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
         }
 
-        if (this.mouseDown) {
+        if (input.mouseDown) {
             ctx.fillStyle = "#0006";
+            ctx.fillRect(input.clickTilePosX, input.clickTilePosY, tileSize, tileSize);
         }
-        else {
-            ctx.fillStyle = "#9996";
-        }
-        ctx.fillRect(mouseTileX * tileSize + mapOffsetX, mouseTileY * tileSize + mapOffsetY, tileSize, tileSize);
+        ctx.fillStyle = "#9996";
+        ctx.fillRect(input.tilePosX, input.tilePosY, tileSize, tileSize);
 
         // if (availableHUD.gameTime) {
         if (true) {
@@ -100,12 +111,12 @@ function Game() {
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#000";
         ctx.beginPath();
-        ctx.moveTo(this.mouseX, this.mouseY - 10);
-        ctx.lineTo(this.mouseX, this.mouseY + 10);
+        ctx.moveTo(input.mouseX, input.mouseY - 10);
+        ctx.lineTo(input.mouseX, input.mouseY + 10);
         ctx.stroke();
         ctx.beginPath();
-        ctx.moveTo(this.mouseX - 10, this.mouseY);
-        ctx.lineTo(this.mouseX + 10, this.mouseY);
+        ctx.moveTo(input.mouseX - 10, input.mouseY);
+        ctx.lineTo(input.mouseX + 10, input.mouseY);
         ctx.stroke();
         ////////////////////////////////////////////////////////////////////////
 
