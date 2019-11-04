@@ -32,10 +32,31 @@ function Game() {
     this.gameState.currentStep = 1;
     ////////////////////////////////////////////////////////////////////////////
 
+    // Map /////////////////////////////////////////////////////////////////////
     this.gameState.map = new Map(map01);
 
+    this.gameState.unitList = [
+        [
+            {x: 5, y: 12, type: 'char_red'},
+            {x: 6, y: 11, type: 'char_red'},
+            {x: 7, y: 11, type: 'char_red'},
+            {x: 8, y: 12, type: 'char_red'},
+            {x: 4, y: 8, type: 'char_red'},
+            {x: 9, y: 8, type: 'char_red'},
+        ],
+        [
+            {x: 1, y: 0, type: 'char_blue'},
+            {x: 3, y: 0, type: 'char_blue'},
+            {x: 3, y: 1, type: 'char_blue'},
+            {x: 5, y: 2, type: 'char_blue'},
+            {x: 6, y: 2, type: 'char_blue'},
+            {x: 9, y: 5, type: 'char_blue'},
+        ],
+    ]
+    ////////////////////////////////////////////////////////////////////////////
+
     this.step = (windowTime) => {
-        let {canvas, ctx, lastTime, tileSize, input} = this.gameState;
+        let {canvas, ctx, lastTime, tileSize, input, unitList} = this.gameState;
 
         this.gameState.time = windowTime / 1000;
         let dT = this.gameState.time - this.gameState.lastTime;
@@ -45,37 +66,20 @@ function Game() {
         ctx.fillStyle = "#25a";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        let unitList1 = [
-            {x: 5, y: 12, type: 'char_red'},
-            {x: 6, y: 11, type: 'char_red'},
-            {x: 7, y: 11, type: 'char_red'},
-            {x: 8, y: 12, type: 'char_red'},
-            {x: 4, y: 8, type: 'char_red'},
-            {x: 9, y: 8, type: 'char_red'},
-        ];
-
-        let unitList2 = [
-            {x: 1, y: 0, type: 'char_blue'},
-            {x: 3, y: 0, type: 'char_blue'},
-            {x: 3, y: 1, type: 'char_blue'},
-            {x: 5, y: 2, type: 'char_blue'},
-            {x: 6, y: 2, type: 'char_blue'},
-            {x: 9, y: 5, type: 'char_blue'},
-        ];
-
         updateGameStateInput(this.gameState);
+        updateTurn(this.gameState);
 
         let mapOffsetX = centerCanvasX - this.gameState.map.ids[0].length * 0.5 * tileSize;
         let mapOffsetY = centerCanvasY - this.gameState.map.ids.length * 0.5 * tileSize;
 
         this.gameState.map.draw(this.gameState, mapOffsetX, mapOffsetY);
 
-        for (let i = 0; i < unitList1.length; ++i) {
-            let unit = unitList1[i];
+        for (let i = 0; i < unitList[0].length; ++i) {
+            let unit = unitList[0][i];
             drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
         }
-        for (let i = 0; i < unitList2.length; ++i) {
-            let unit = unitList2[i];
+        for (let i = 0; i < unitList[1].length; ++i) {
+            let unit = unitList[1][i];
             drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
         }
 
@@ -105,6 +109,10 @@ function Game() {
             ctx.font = "13px sans-serif";
             ctx.fillStyle = "#7f7";
             ctx.fillText("." + timeMili, 92, canvas.height - 30);
+
+            ctx.font = "13px sans-serif";
+            ctx.fillStyle = "#7f7";
+            ctx.fillText(this.gameState.currentStep + " | " + this.gameState.currentTurn, 25, canvas.height - 75);
         }
 
         // Draw mouse cursor ///////////////////////////////////////////////////
