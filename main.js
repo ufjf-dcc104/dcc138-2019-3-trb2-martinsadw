@@ -28,8 +28,11 @@ function Game() {
     ////////////////////////////////////////////////////////////////////////////
 
     // Turn ////////////////////////////////////////////////////////////////////
-    this.gameState.currentTurn = 1;
-    this.gameState.currentStep = 1;
+    this.gameState.turn = {
+        currentTurn: 0,
+        currentStep: 0,
+        selectedUnitIndex: 0,
+    }
     ////////////////////////////////////////////////////////////////////////////
 
     // Map /////////////////////////////////////////////////////////////////////
@@ -56,7 +59,7 @@ function Game() {
     ////////////////////////////////////////////////////////////////////////////
 
     this.step = (windowTime) => {
-        let {canvas, ctx, lastTime, tileSize, input, unitList} = this.gameState;
+        let {canvas, ctx, lastTime, tileSize, turn, input, unitList} = this.gameState;
 
         this.gameState.time = windowTime / 1000;
         let dT = this.gameState.time - this.gameState.lastTime;
@@ -81,6 +84,13 @@ function Game() {
         for (let i = 0; i < unitList[1].length; ++i) {
             let unit = unitList[1][i];
             drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
+        }
+
+        if (turn.currentStep == 1) {
+            let selectedUnit = unitList[turn.currentTurn][turn.selectedUnitIndex];
+            ctx.strokeStyle = "#ff0";
+            ctx.lineWidth = 4;
+            ctx.strokeRect(worldToScreen(selectedUnit.x, mapOffsetX, tileSize) + 2, worldToScreen(selectedUnit.y, mapOffsetY, tileSize) + 2, tileSize - 4, tileSize - 4);
         }
 
         if (input.mouseDown) {
@@ -110,9 +120,19 @@ function Game() {
             ctx.fillStyle = "#7f7";
             ctx.fillText("." + timeMili, 92, canvas.height - 30);
 
+            let turnName = [
+                "Red",
+                "Blue",
+            ];
+            let stepName = [
+                "Select",
+                "Move",
+                "Attack",
+                "Confirm",
+            ];
             ctx.font = "13px sans-serif";
             ctx.fillStyle = "#7f7";
-            ctx.fillText(this.gameState.currentStep + " | " + this.gameState.currentTurn, 25, canvas.height - 75);
+            ctx.fillText(turnName[turn.currentTurn] + " - " + stepName[turn.currentStep], 25, canvas.height - 75);
         }
 
         // Draw mouse cursor ///////////////////////////////////////////////////

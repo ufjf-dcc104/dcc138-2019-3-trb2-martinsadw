@@ -23,13 +23,13 @@ function addInputListener(canvas) {
         inputState.mouseDown = true;
         inputState.lastClickX = inputState.mouseX;
         inputState.lastClickY = inputState.mouseY;
-        inputState.lastClickCounter = inputState.eventCounter;
     });
     canvas.addEventListener('mouseup', (event) => {
         event.preventDefault();
         inputState.eventCounter++;
 
         inputState.mouseDown = false;
+        inputState.lastClickCounter = inputState.eventCounter;
     });
 
     // Prevents context menu
@@ -43,15 +43,15 @@ function updateGameStateInput(gameState) {
     let mapOffsetX = centerCanvasX - gameState.map.ids[0].length * 0.5 * tileSize;
     let mapOffsetY = centerCanvasY - gameState.map.ids.length * 0.5 * tileSize;
 
+    gameState.input.clickTileX = screenToWorld(inputState.lastClickX, mapOffsetX, tileSize);
+    gameState.input.clickTileY = screenToWorld(inputState.lastClickY, mapOffsetY, tileSize);
+    gameState.input.clickTilePosX = worldToScreen(gameState.input.clickTileX, mapOffsetX, tileSize);
+    gameState.input.clickTilePosY = worldToScreen(gameState.input.clickTileY, mapOffsetY, tileSize);
+    gameState.input.clickMouseX = inputState.lastClickX;
+    gameState.input.clickMouseY = inputState.lastClickY;
+
     if (gameState.input.lastClickCounter < inputState.lastClickCounter) {
         gameState.input.click = true;
-
-        gameState.input.clickTileX = screenToWorld(inputState.lastClickX, mapOffsetX, tileSize);
-        gameState.input.clickTileY = screenToWorld(inputState.lastClickY, mapOffsetY, tileSize);
-        gameState.input.clickTilePosX = worldToScreen(gameState.input.clickTileX, mapOffsetX, tileSize);
-        gameState.input.clickTilePosY = worldToScreen(gameState.input.clickTileY, mapOffsetY, tileSize);
-        gameState.input.clickMouseX = inputState.lastClickX;
-        gameState.input.clickMouseY = inputState.lastClickY;
     }
     else {
         gameState.input.click = false;
