@@ -32,6 +32,7 @@ function Game() {
         currentTurn: 0,
         currentStep: 0,
         selectedUnitIndex: 0,
+        moveOptions: [],
     }
     ////////////////////////////////////////////////////////////////////////////
 
@@ -91,6 +92,20 @@ function Game() {
             ctx.strokeStyle = "#ff0";
             ctx.lineWidth = 4;
             ctx.strokeRect(worldToScreen(selectedUnit.x, mapOffsetX, tileSize) + 2, worldToScreen(selectedUnit.y, mapOffsetY, tileSize) + 2, tileSize - 4, tileSize - 4);
+
+            for (let y = 0; y < turn.moveOptions.length; y++) {
+                for (let x = 0; x < turn.moveOptions[y].length; x++) {
+                    let tile = turn.moveOptions[y][x];
+
+                    if (!mapIsWalkable(this.gameState.map.weights, x, y) ||
+                        tile.cost > 5 ||
+                        (x == selectedUnit.x && y == selectedUnit.y))
+                        continue;
+
+                    ctx.fillStyle = "#9909";
+                    ctx.fillRect(x * tileSize + mapOffsetX, y * tileSize + mapOffsetY, tileSize, tileSize);
+                }
+            }
         }
 
         if (input.mouseDown) {
@@ -99,6 +114,31 @@ function Game() {
         }
         ctx.fillStyle = "#9996";
         ctx.fillRect(input.tilePosX, input.tilePosY, tileSize, tileSize);
+
+        // this.gameState.map.debugDraw(this.gameState, this.temp, 5, mapOffsetX, mapOffsetY);
+        // for (let y = 0; y < this.temp.length; y++) {
+        //     for (let x = 0; x < this.temp[y].length; x++) {
+        //         let tile = this.temp[y][x];
+        //
+        //         if (tile.cost > 5) continue;
+        //
+        //         ctx.font = "10px sans-serif";
+        //         ctx.fillStyle = "#000";
+        //         ctx.fillText(tile.cost, x * tileSize + mapOffsetX + 5, y * tileSize + mapOffsetY + 15);
+        //
+        //         if (tile.prev) {
+        //             // ctx.fillStyle = "#444";
+        //             // ctx.fillText(tile.prev.x + "x" + tile.prev.y, x * tileSize + mapOffsetX + 5, y * tileSize + mapOffsetY + 30);
+        //
+        //             ctx.beginPath();
+        //             ctx.lineWidth = 2;
+        //             ctx.strokeStyle = "#000";
+        //             ctx.moveTo(x * tileSize + mapOffsetX + 24, y * tileSize + mapOffsetY + 24);
+        //             ctx.lineTo(tile.prev.x * tileSize + mapOffsetX + 24, tile.prev.y * tileSize + mapOffsetY + 24);
+        //             ctx.stroke();
+        //         }
+        //     }
+        // }
 
         // if (availableHUD.gameTime) {
         if (true) {

@@ -10,18 +10,21 @@ function updateTurn(gameState) {
     switch (turn.currentStep) {
         case 0: // Select unit
             if (gameState.input.click) {
-                clickedUnit = findUnit(gameState.unitList[turn.currentTurn], input.clickTileX, input.clickTileY);
+                let clickedUnitIndex = findUnit(gameState.unitList[turn.currentTurn], input.clickTileX, input.clickTileY);
 
-                if (clickedUnit >= 0) {
-                    gameState.turn.selectedUnitIndex = clickedUnit;
+                if (clickedUnitIndex >= 0) {
+                    let clickedUnit = gameState.unitList[turn.currentTurn][clickedUnitIndex];
+                    gameState.turn.selectedUnitIndex = clickedUnitIndex;
+                    gameState.turn.moveOptions = calculateDistanceMap(gameState.map.weights, clickedUnit.x, clickedUnit.y);
                     gameState.turn.currentStep = 1;
                 }
             }
             break;
         case 1: // Select movement
 
-            if (true) // Check movement selected
-                gameState.turn.currentStep = 2;
+
+            // if (true) // Check movement selected
+            //     gameState.turn.currentStep = 2;
             break;
         case 2: // Select action
 
