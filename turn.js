@@ -63,6 +63,11 @@ function updateTurn(gameState) {
                     let distance = turn.attackOptions[input.clickTileY][input.clickTileX].cost;
                     if (distance <= selectedUnit.attackRange) {
                         clickedUnit.hp -= selectedUnit.attack;
+
+                        if (clickedUnit.hp <= 0) {
+                            gameState.unitList[enemyTurn].splice(clickedUnitIndex, 1);
+                        }
+
                         gameState.turn.currentStep = 3;
                     }
                 }
