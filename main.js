@@ -41,20 +41,20 @@ function Game() {
 
     this.gameState.unitList = [
         [
-            {x: 5, y: 12, type: 'char_red'},
-            {x: 6, y: 11, type: 'char_red'},
-            {x: 7, y: 11, type: 'char_red'},
-            {x: 8, y: 12, type: 'char_red'},
-            {x: 4, y: 8, type: 'char_red'},
-            {x: 9, y: 8, type: 'char_red'},
+            {x:  5, y: 12, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  6, y: 11, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  7, y: 11, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  8, y: 12, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  4, y:  8, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  9, y:  8, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
         ],
         [
-            {x: 1, y: 0, type: 'char_blue'},
-            {x: 3, y: 0, type: 'char_blue'},
-            {x: 3, y: 1, type: 'char_blue'},
-            {x: 5, y: 2, type: 'char_blue'},
-            {x: 6, y: 2, type: 'char_blue'},
-            {x: 9, y: 5, type: 'char_blue'},
+            {x:  1, y:  0, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  3, y:  0, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  3, y:  1, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  5, y:  2, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  6, y:  2, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  9, y:  5, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
         ],
     ]
     ////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ function Game() {
                         let tile = turn.moveOptions[y][x];
 
                         if (!mapIsWalkable(this.gameState.map.weights, x, y) ||
-                            tile.cost > 5 ||
+                            tile.cost > selectedUnit.speed ||
                             (x == selectedUnit.x && y == selectedUnit.y))
                             continue;
 
@@ -118,7 +118,7 @@ function Game() {
                         let tile = turn.attackOptions[y][x];
 
                         if (!mapIsWalkable(this.gameState.map.weights, x, y) ||
-                            tile.cost > 1 ||
+                            tile.cost > selectedUnit.attackRange ||
                             (x == selectedUnit.x && y == selectedUnit.y))
                             continue;
 

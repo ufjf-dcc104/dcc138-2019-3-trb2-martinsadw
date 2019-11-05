@@ -1,7 +1,7 @@
 let idWeight = [];
 idWeight[0] = 1;
 idWeight[1] = -1;
-idWeight[2] = 3;
+idWeight[2] = 2;
 
 let idColor = [];
 idColor[0] = "#2c4";
