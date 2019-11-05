@@ -41,20 +41,20 @@ function Game() {
 
     this.gameState.unitList = [
         [
-            {x:  5, y: 12, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  6, y: 11, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  7, y: 11, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  8, y: 12, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  4, y:  8, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  9, y:  8, type:  'char_red', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  5, y: 12, type:  'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  6, y: 11, type:  'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  7, y: 11, type:  'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  8, y: 12, type:  'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  4, y:  8, type:  'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  9, y:  8, type:  'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
         ],
         [
-            {x:  1, y:  0, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  3, y:  0, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  3, y:  1, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  5, y:  2, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  6, y:  2, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  9, y:  5, type: 'char_blue', max_hp: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  1, y:  0, type: 'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  3, y:  0, type: 'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  3, y:  1, type: 'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  5, y:  2, type: 'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  6, y:  2, type: 'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  9, y:  5, type: 'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
         ],
     ]
     ////////////////////////////////////////////////////////////////////////////
@@ -78,13 +78,20 @@ function Game() {
 
         this.gameState.map.draw(this.gameState, mapOffsetX, mapOffsetY);
 
-        for (let i = 0; i < unitList[0].length; ++i) {
-            let unit = unitList[0][i];
-            drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
+        for (let t = 0; t < unitList.length; ++t) {
+            for (let i = 0; i < unitList[t].length; ++i) {
+                let unit = unitList[t][i];
+                drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
+            }
         }
-        for (let i = 0; i < unitList[1].length; ++i) {
-            let unit = unitList[1][i];
-            drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
+        for (let t = 0; t < unitList.length; ++t) {
+            for (let i = 0; i < unitList[t].length; ++i) {
+                let unit = unitList[t][i];
+                ctx.fillStyle = "#222";
+                ctx.fillRect(unit.x * tileSize + mapOffsetX + 5, unit.y * tileSize + mapOffsetY - 15, tileSize - 10, 10);
+                ctx.fillStyle = "#f32";
+                ctx.fillRect(unit.x * tileSize + mapOffsetX + 5, unit.y * tileSize + mapOffsetY - 15, (tileSize - 10) * Math.max((unit.hp / unit.maxHP), 0), 10);
+            }
         }
 
         let selectedUnit = unitList[turn.currentTurn][turn.selectedUnitIndex];
