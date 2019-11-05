@@ -21,15 +21,27 @@ function updateTurn(gameState) {
             }
             break;
         case 1: // Select movement
+            if (gameState.input.click) {
+                let selectedUnit = gameState.unitList[turn.currentTurn][gameState.turn.selectedUnitIndex];
 
+                if (mapIsWalkable(gameState.map.weights, input.clickTileX, input.clickTileY) &&
+                    findUnit(gameState.unitList[turn.currentTurn], input.clickTileX, input.clickTileY) < 0) {
 
-            // if (true) // Check movement selected
-            //     gameState.turn.currentStep = 2;
+                    let distance = turn.moveOptions[input.clickTileY][input.clickTileX].cost;
+                    if (distance <= 5) {
+                        selectedUnit.x = input.clickTileX;
+                        selectedUnit.y = input.clickTileY;
+                        gameState.turn.attackOptions = calculateDistanceMap(gameState.map.weights, selectedUnit.x, selectedUnit.y, false);
+
+                        gameState.turn.currentStep = 2;
+                    }
+                }
+            }
             break;
         case 2: // Select action
 
-            if (true) // Check action selected
-                gameState.turn.currentStep = 3;
+            // if (true) // Check action selected
+            //     gameState.turn.currentStep = 3;
             break;
         case 3: // Confirm
 

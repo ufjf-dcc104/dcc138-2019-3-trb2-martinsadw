@@ -64,7 +64,7 @@ function mapIsWalkable(map, x, y) {
     return (map[y][x] >= 0);
 }
 // TODO(andre:2019-11-05): Considerar as unidades no calculo de movimento
-function calculateDistanceMap(weigthMap, x, y) {
+function calculateDistanceMap(weigthMap, x, y, useCost = true) {
     if (!mapIsWalkable(weigthMap, x, y))
         return null;
 
@@ -102,6 +102,10 @@ function calculateDistanceMap(weigthMap, x, y) {
 
                 let oldDistance = distance[newPos.y][newPos.x].cost;
                 let newDistance = distance[curr.y][curr.x].cost + weigthMap[newPos.y][newPos.x];
+                if (!useCost) {
+                    newDistance = distance[curr.y][curr.x].cost + 1;
+                }
+
                 if (oldDistance < 0 || oldDistance > newDistance) {
                     distance[newPos.y][newPos.x].cost = newDistance;
                     distance[newPos.y][newPos.x].prev = {x: curr.x, y: curr.y};

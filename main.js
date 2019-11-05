@@ -87,25 +87,46 @@ function Game() {
             drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
         }
 
-        if (turn.currentStep == 1) {
-            let selectedUnit = unitList[turn.currentTurn][turn.selectedUnitIndex];
-            ctx.strokeStyle = "#ff0";
-            ctx.lineWidth = 4;
-            ctx.strokeRect(worldToScreen(selectedUnit.x, mapOffsetX, tileSize) + 2, worldToScreen(selectedUnit.y, mapOffsetY, tileSize) + 2, tileSize - 4, tileSize - 4);
+        let selectedUnit = unitList[turn.currentTurn][turn.selectedUnitIndex];
+        switch (turn.currentStep) {
+            case 1:
+                ctx.strokeStyle = "#ff0";
+                ctx.lineWidth = 4;
+                ctx.strokeRect(worldToScreen(selectedUnit.x, mapOffsetX, tileSize) + 2, worldToScreen(selectedUnit.y, mapOffsetY, tileSize) + 2, tileSize - 4, tileSize - 4);
 
-            for (let y = 0; y < turn.moveOptions.length; y++) {
-                for (let x = 0; x < turn.moveOptions[y].length; x++) {
-                    let tile = turn.moveOptions[y][x];
+                for (let y = 0; y < turn.moveOptions.length; y++) {
+                    for (let x = 0; x < turn.moveOptions[y].length; x++) {
+                        let tile = turn.moveOptions[y][x];
 
-                    if (!mapIsWalkable(this.gameState.map.weights, x, y) ||
-                        tile.cost > 5 ||
-                        (x == selectedUnit.x && y == selectedUnit.y))
-                        continue;
+                        if (!mapIsWalkable(this.gameState.map.weights, x, y) ||
+                            tile.cost > 5 ||
+                            (x == selectedUnit.x && y == selectedUnit.y))
+                            continue;
 
-                    ctx.fillStyle = "#9909";
-                    ctx.fillRect(x * tileSize + mapOffsetX, y * tileSize + mapOffsetY, tileSize, tileSize);
+                        ctx.fillStyle = "#9909";
+                        ctx.fillRect(x * tileSize + mapOffsetX, y * tileSize + mapOffsetY, tileSize, tileSize);
+                    }
                 }
-            }
+                break;
+            case 2:
+                ctx.strokeStyle = "#ff0";
+                ctx.lineWidth = 4;
+                ctx.strokeRect(worldToScreen(selectedUnit.x, mapOffsetX, tileSize) + 2, worldToScreen(selectedUnit.y, mapOffsetY, tileSize) + 2, tileSize - 4, tileSize - 4);
+
+                for (let y = 0; y < turn.attackOptions.length; y++) {
+                    for (let x = 0; x < turn.attackOptions[y].length; x++) {
+                        let tile = turn.attackOptions[y][x];
+
+                        if (!mapIsWalkable(this.gameState.map.weights, x, y) ||
+                            tile.cost > 1 ||
+                            (x == selectedUnit.x && y == selectedUnit.y))
+                            continue;
+
+                        ctx.fillStyle = "#9009";
+                        ctx.fillRect(x * tileSize + mapOffsetX, y * tileSize + mapOffsetY, tileSize, tileSize);
+                    }
+                }
+                break;
         }
 
         if (input.mouseDown) {
