@@ -4,7 +4,9 @@ let loadedAssets = [];
 let assetsName = [];
 assetsName['char'] = 'img/char.png';
 assetsName['char_red'] = 'img/char_red.png';
+assetsName['archer_red'] = 'img/archer_red.png';
 assetsName['char_blue'] = 'img/char_blue.png';
+assetsName['archer_blue'] = 'img/archer_blue.png';
 
 function loadAsset(name) {
     let asset = new Image();
