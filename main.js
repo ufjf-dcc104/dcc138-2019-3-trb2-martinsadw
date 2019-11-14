@@ -41,20 +41,28 @@ function Game() {
 
     this.gameState.unitList = [
         [
-            {x:  5, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2},
-            {x:  8, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2},
-            {x:  6, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  7, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  4, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  9, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  0, y: 13, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x: 13, y: 13, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x:  5, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x:  8, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x:  0, y: 12, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x: 13, y: 12, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  6, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  7, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  4, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  9, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
         ],
         [
-            {x:  5, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2},
-            {x:  8, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2},
-            {x:  6, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  7, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  4, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
-            {x:  9, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2},
+            {x:  0, y:  0, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x: 13, y:  0, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x:  5, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x:  8, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
+            {x:  0, y:  1, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x: 13, y:  1, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  6, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  7, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  4, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  9, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
         ],
     ]
     ////////////////////////////////////////////////////////////////////////////
@@ -82,6 +90,14 @@ function Game() {
             for (let i = 0; i < unitList[t].length; ++i) {
                 let unit = unitList[t][i];
                 drawImage(ctx, unit.type, unit.x * tileSize + mapOffsetX, unit.y * tileSize + mapOffsetY, tileSize, tileSize);
+
+                if (unit.cooldown > 0) {
+                    ctx.font = "30px sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillStyle = "#000";
+                    ctx.fillText(unit.cooldown, (unit.x + 0.5) * tileSize + mapOffsetX, (unit.y + 0.5) * tileSize + mapOffsetY + 4);
+                }
             }
         }
         for (let t = 0; t < unitList.length; ++t) {
@@ -89,10 +105,15 @@ function Game() {
                 let unit = unitList[t][i];
                 ctx.fillStyle = "#222";
                 ctx.fillRect(unit.x * tileSize + mapOffsetX + 5, unit.y * tileSize + mapOffsetY - 15, tileSize - 10, 8);
+
                 ctx.fillStyle = "#f32";
+                if (unit.cooldown > 0)
+                    ctx.fillStyle = "#900";
                 ctx.fillRect(unit.x * tileSize + mapOffsetX + 5, unit.y * tileSize + mapOffsetY - 15, (tileSize - 10) * Math.max((unit.hp / unit.maxHP), 0), 8);
             }
         }
+        ctx.textAlign = "left";
+        ctx.textBaseline = "alphabetic";
 
         let selectedUnit = unitList[turn.currentTurn][turn.selectedUnitIndex];
         switch (turn.currentStep) {
@@ -182,11 +203,13 @@ function Game() {
             let timeSec = Math.floor(this.gameState.time) % 60;
             let timeMin = Math.floor(this.gameState.time / 60) % 60;
             let timeHour = Math.floor(this.gameState.time / (60 * 60));
-            ctx.fillText(timeHour + ":" + pad(timeMin, 2) + ":" + pad(timeSec, 2), 25, canvas.height - 30);
+            let timeText = timeHour + ":" + pad(timeMin, 2) + ":" + pad(timeSec, 2);
+            let timeTextWidth = ctx.measureText(timeText).width;
+            ctx.fillText(timeText, 25, canvas.height - 30);
 
             ctx.font = "13px sans-serif";
             ctx.fillStyle = "#7f7";
-            ctx.fillText("." + timeMili, 92, canvas.height - 30);
+            ctx.fillText("." + timeMili, 25 + timeTextWidth, canvas.height - 30);
 
             let turnName = [
                 "Red",

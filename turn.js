@@ -1,12 +1,13 @@
-function findUnit(list, x, y) {
-    return list.findIndex((elem) => {
-        return (elem.x == x && elem.y == y);
-    });
-}
-
 function updateTurn(gameState) {
     let {input, turn} = gameState;
     let enemyTurn = (turn.currentTurn + 1) % 2;
+
+    let availableUnitsCount = gameState.unitList[turn.currentTurn].reduce((acc, unit) => {
+        return (unit.cooldown > 0 ? acc : acc + 1);
+    }, 0);
+
+    if (availableUnitsCount <= 0)
+        endTurn(gameState);
 
     switch (turn.currentStep) {
         case 0: // Select unit
@@ -15,9 +16,12 @@ function updateTurn(gameState) {
 
                 if (clickedUnitIndex >= 0) {
                     let clickedUnit = gameState.unitList[turn.currentTurn][clickedUnitIndex];
-                    gameState.turn.selectedUnitIndex = clickedUnitIndex;
-                    gameState.turn.moveOptions = calculateDistanceMap(gameState.map.weights, clickedUnit.x, clickedUnit.y);
-                    gameState.turn.currentStep = 1;
+
+                    if (clickedUnit.cooldown <= 0) {
+                        gameState.turn.selectedUnitIndex = clickedUnitIndex;
+                        gameState.turn.moveOptions = calculateDistanceMap(gameState.map.weights, clickedUnit.x, clickedUnit.y);
+                        gameState.turn.currentStep = 1;
+                    }
                 }
             }
             break;
@@ -51,8 +55,8 @@ function updateTurn(gameState) {
                 let selectedUnit = gameState.unitList[turn.currentTurn][gameState.turn.selectedUnitIndex];
 
                 if (input.clickTileX == selectedUnit.x && input.clickTileY == selectedUnit.y) {
-                    gameState.turn.currentTurn = (gameState.turn.currentTurn == 0 ? 1 : 0);
-                    gameState.turn.currentStep = 0;
+                    applyDelay(selectedUnit);
+                    endTurn(gameState);
                     break;
                 }
 
@@ -74,12 +78,40 @@ function updateTurn(gameState) {
             }
             break;
         case 3: // Confirm
+            let selectedUnit = gameState.unitList[turn.currentTurn][gameState.turn.selectedUnitIndex];
 
             if (true) { // Check end of turn
-                gameState.turn.currentTurn = (gameState.turn.currentTurn == 0 ? 1 : 0);
-                gameState.turn.currentStep = 0;
+                applyDelay(selectedUnit);
+                endTurn(gameState);
             }
             break;
         default:
+    }
+}
+
+function findUnit(list, x, y) {
+    return list.findIndex((elem) => {
+        return (elem.x == x && elem.y == y);
+    });
+}
+
+function applyDelay(unit) {
+    unit.cooldown = unit.delay;
+}
+
+function endTurn(gameState) {
+    let {unitList} = gameState;
+
+    gameState.turn.currentTurn = (gameState.turn.currentTurn == 0 ? 1 : 0);
+    gameState.turn.currentStep = 0;
+
+    let t = gameState.turn.currentTurn;
+    for (let i = 0; i < unitList[t].length; ++i) {
+        let unit = unitList[t][i];
+
+        if (unit.cooldown > 0)
+            unit.cooldown--;
+
+        // console.log("CD: ", t, /i, unit.cooldown);
     }
 }
