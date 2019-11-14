@@ -6,8 +6,10 @@ function updateTurn(gameState) {
         return (unit.cooldown > 0 ? acc : acc + 1);
     }, 0);
 
-    if (availableUnitsCount <= 0)
+    if (availableUnitsCount <= 0 || turn.actionsLeft <= 0) {
         endTurn(gameState);
+        return;
+    }
 
     switch (turn.currentStep) {
         case 0: // Select unit
@@ -56,7 +58,7 @@ function updateTurn(gameState) {
 
                 if (input.clickTileX == selectedUnit.x && input.clickTileY == selectedUnit.y) {
                     applyDelay(selectedUnit);
-                    endTurn(gameState);
+                    endAction(gameState);
                     break;
                 }
 
@@ -82,7 +84,7 @@ function updateTurn(gameState) {
 
             if (true) { // Check end of turn
                 applyDelay(selectedUnit);
-                endTurn(gameState);
+                endAction(gameState);
             }
             break;
         default:
@@ -99,9 +101,15 @@ function applyDelay(unit) {
     unit.cooldown = unit.delay;
 }
 
+function endAction(gameState) {
+    gameState.turn.actionsLeft--;
+    gameState.turn.currentStep = 0;
+}
+
 function endTurn(gameState) {
     let {unitList} = gameState;
 
+    gameState.turn.actionsLeft = gameState.turn.actionsTotal;
     gameState.turn.currentTurn = (gameState.turn.currentTurn == 0 ? 1 : 0);
     gameState.turn.currentStep = 0;
 

@@ -29,6 +29,8 @@ function Game() {
 
     // Turn ////////////////////////////////////////////////////////////////////
     this.gameState.turn = {
+        actionsTotal: 3,
+        actionsLeft: 3,
         currentTurn: 0,
         currentStep: 0,
         selectedUnitIndex: 0,
@@ -41,28 +43,28 @@ function Game() {
 
     this.gameState.unitList = [
         [
-            {x:  0, y: 13, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x: 13, y: 13, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x:  5, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x:  8, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x:  0, y: 12, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x: 13, y: 12, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  6, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  7, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  4, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  9, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  0, y: 13, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x: 13, y: 13, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x:  5, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x:  8, y: 12, type:  'archer_red', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x:  0, y: 12, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x: 13, y: 12, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  6, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  7, y: 11, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  4, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  9, y: 10, type:    'char_red', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
         ],
         [
-            {x:  0, y:  0, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x: 13, y:  0, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x:  5, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x:  8, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 2, cooldown: 0},
-            {x:  0, y:  1, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x: 13, y:  1, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  6, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  7, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  4, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
-            {x:  9, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 3, cooldown: 0},
+            {x:  0, y:  0, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x: 13, y:  0, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x:  5, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x:  8, y:  1, type: 'archer_blue', maxHP: 4, hp: 4, speed: 3, attackRange: 3, attack: 2, delay: 1, cooldown: 0},
+            {x:  0, y:  1, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x: 13, y:  1, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  6, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  7, y:  2, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  4, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
+            {x:  9, y:  3, type:   'char_blue', maxHP: 5, hp: 5, speed: 4, attackRange: 1, attack: 2, delay: 2, cooldown: 0},
         ],
     ]
     ////////////////////////////////////////////////////////////////////////////
@@ -224,6 +226,8 @@ function Game() {
             ctx.font = "13px sans-serif";
             ctx.fillStyle = "#7f7";
             ctx.fillText(turnName[turn.currentTurn] + " - " + stepName[turn.currentStep], 25, canvas.height - 75);
+
+            ctx.fillText("Actions: " + turn.actionsLeft + " / " + turn.actionsTotal, 25, canvas.height - 95);
         }
 
         // Draw mouse cursor ///////////////////////////////////////////////////
